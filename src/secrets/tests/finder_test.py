@@ -1,6 +1,6 @@
 import unittest
 
-from src.secrets import finder
+from secrets import finder
 
 
 class DefaultFinderTestCase(unittest.TestCase):

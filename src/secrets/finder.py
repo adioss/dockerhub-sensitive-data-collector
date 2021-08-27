@@ -1,6 +1,6 @@
 from typing import Final
 
-from src.secrets.pattern import Pattern
+from secrets.pattern import Pattern
 
 MAX_TESTED_LENGTH: Final = 5000
 

@@ -38,6 +38,17 @@ Project structure > SDKs > Add Python SDK
 Select Pipenv environment and click ok
 ```
 
+```
+// build docker image
+docker build  -t adioss/dockerhub-sensitive-data-collector .
+// start 
+docker run -ti --rm adioss/dockerhub-sensitive-data-collector
+docker run -d --rm adioss/dockerhub-sensitive-data-collector --log-level=DEBUG
+# push
+docker login
+docker push adioss/dockerhub-sensitive-data-collector
+```
+
 ## Useful commands
 
 ```
