@@ -54,6 +54,8 @@ class DefaultFinderTestCase(unittest.TestCase):
             {'value': ' ENV AWS_SECRET_ACCESS_KEY=bFIiK2Ta5Dd3MEPJcnXzbJb01yRByZnrWMAvLpMa', 'expected': True},
             {'value': ' ENV AWS_SECRET_ACCESS_KEY=4FcmDrL8tJ7jx7poyV0L5GOVqabM/Mk6wBHQREOH', 'expected': True},
             {'value': 'tototo aws bFIiK2Ta5Dd3MEPJcnXzbJb01yRByZnrWMAvLpMa test ', 'expected': True},
+            {'value': 'https://apk.corretto.aws/amazoncorretto.rsa.pub && '
+                      'SHA_SUM=\"6cfdf08be09f32ca298e2d5bd4a359ee2b275765c09b56d514624bf831eafb91', 'expected': False},
         ]
         for tested in tests:
             # When
@@ -77,11 +79,13 @@ class DefaultFinderTestCase(unittest.TestCase):
         """ test """
         # Given
         tests = [
+            {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa ', 'expected': True},
             {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaa aaa ', 'expected': False},
-            {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa ', 'expected': True}
+            {'value': '{"digest": $url = \'https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC'
+                      '-ED5963AEAD48/vc_redist.x64.exe\'}', 'expected': False},
         ]
         for tested in tests:
             # When
             result = finder.contains_secret_pattern(tested['value'], finder.Pattern.AZURE_CLIENT_SECRET)
-            # Then
-            self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])
+        # Then
+        self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])

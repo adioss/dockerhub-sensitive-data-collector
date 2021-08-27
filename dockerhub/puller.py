@@ -17,15 +17,14 @@ def compute_repository(repository: str) -> str:
     return repository if "/" in repository else "library/" + repository
 
 
-def collect_sensitive_data_from_layers(layers: list) -> list:
+def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
     """ TODO """
+    layers: list = collect_layers(repository, tag)
     results = []
     for layer in layers:
-        logging.debug("Layer: %s", layer)
         for pattern in Pattern:
             if finder.contains_secret_pattern(layer['instruction'], pattern):
-                logging.debug("Secret found: %s" % layer)
-                results.append(Result(pattern, layer))
+                results.append(Result(repository, pattern, layer))
     return results
 
 
@@ -36,8 +35,13 @@ def collect_layers(repository: str, tag: dict) -> list:
     query = "%s/v2/repositories/%s/tags/%s/images" % (DOCKERHUB_URL, repository, tag["name"])
     logging.debug("Layers url: %s", query)
     headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={})
-    return json.loads(response.text)[0]['layers']
+    response = requests.request("GET", query, headers=headers, data={}, stream=False)
+    if response.status_code == 404 or response.status_code == 500:
+        return []
+    response_as_json = json.loads(response.text)
+    if len(response_as_json) == 0:
+        return []
+    return response_as_json[0]['layers']
 
 
 @retry(wait_fixed=10000)
@@ -46,13 +50,16 @@ def parse_tags(repository: str):
     query = "%s/v2/repositories/%s/tags?page=1&page_size=1&ordering=last_updated" % (DOCKERHUB_URL, repository)
     logging.debug("Tags url: %s", query)
     headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={})
+    response = requests.request("GET", query, headers=headers, data={}, stream=False)
+    if response.status_code != 200:
+        logging.info("Cannot be parsed so bypassed: %s", query)
+        return
     tags = json.loads(response.text)
     if tags["count"] > 0:
-        collected = collect_sensitive_data_from_layers(collect_layers(repository, tags["results"][0]))
+        collected = collect_sensitive_data_from_tag(repository, tags["results"][0])
         if len(collected) > 0:
             for sensitive_data in collected:
-                logging.info("%s : %s" % (repository, sensitive_data.to_json()))
+                logging.info("%s : %s", repository, sensitive_data.to_json())
 
 
 def parse_repository(summary: dict):
@@ -69,7 +76,7 @@ def list_last_updated_image(currently_parsed_elements: list) -> list:
     query = "%s?q=&type=image&tag&sort=updated_at&order=desc&page_size=%s&page=%s" \
             % (DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE, page)
     headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={})
+    response = requests.request("GET", query, headers=headers, data={}, stream=False)
     logging.debug("Last pushed images (page %s) : %s", str(page), response.text)
     summaries = json.loads(response.text)["summaries"]
     for summary in summaries:
