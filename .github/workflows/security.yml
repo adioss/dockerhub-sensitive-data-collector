@@ -22,5 +22,5 @@ jobs:
       - name: anchore action SARIF report
         run: cat results.sarif
 
-      - name: Detect Secrets
-        uses: evanextreme/detect-secrets-action@1.0.0
+#      - name: Detect Secrets
+#        uses: evanextreme/detect-secrets-action@1.0.0
