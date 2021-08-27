@@ -52,7 +52,7 @@ def parse_tags(repository: str):
     headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
     response = requests.request("GET", query, headers=headers, data={}, stream=False)
     if response.status_code != 200:
-        logging.info("Cannot be parsed so bypassed: %s", query)
+        logging.debug("Cannot be parsed so bypassed: %s", query)
         return
     tags = json.loads(response.text)
     if tags["count"] > 0:
