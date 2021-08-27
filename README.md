@@ -13,11 +13,14 @@ pip install pipenv
 
 ```
 // create a venv and use it (if needed)
-python3 -m venv venv
-. ./venv/bin/activate
+PIPENV_IGNORE_VIRTUALENVS=1 pipenv shell
 
 // install dependencies
 pipenv install --dev
+// lock
+pipenv lock
+// install for prod
+pipenv install --ignore-pipfile
 
 // run 
 pipenv run python main.py
@@ -32,9 +35,7 @@ python main.py
 ```
 // create a locale venv
 Project structure > SDKs > Add Python SDK 
-Select Virtualenv environment and configure venv path to this project path
-
-. ./venv/bin/activate
+Select Pipenv environment and click ok
 ```
 
 ## Useful commands

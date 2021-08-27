@@ -1,6 +1,6 @@
 import json
 
-from secrets.finder import Pattern
+from src.secrets.finder import Pattern
 
 
 class Result:

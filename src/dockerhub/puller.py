@@ -4,11 +4,11 @@ import logging
 import requests
 from retrying import retry
 
-from dockerhub.result import Result
-from secrets import finder
-from secrets.finder import Pattern
-from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
-from utils.utils import sha256
+from src.dockerhub.result import Result
+from src.secrets import finder
+from src.secrets.finder import Pattern
+from src.utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
+from src.utils.utils import sha256
 
 
 def compute_repository(repository: str) -> str:
