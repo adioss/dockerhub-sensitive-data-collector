@@ -1,6 +1,7 @@
 import json
 import logging
 import traceback
+from typing import Final
 
 import requests
 from retrying import retry
@@ -11,6 +12,8 @@ from secrets import finder
 from secrets.finder import Pattern
 from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
 from utils.utils import sha256
+
+UNMANAGED_RESPONSE_CODE: Final = [403, 404, 500]
 
 
 def retry_if_io_error(exception):
@@ -26,9 +29,10 @@ def get_request(query) -> dict:
     """ TODO """
     headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
     response = requests.request("GET", query, headers=headers, data={}, stream=False)
+    if response.status_code in UNMANAGED_RESPONSE_CODE:
+        return dict()
     if response.status_code != 200:
-        logging.info(response.status_code)
-    if response.status_code == 404 or response.status_code == 500:
+        logging.warning("Unmanaged response: %s (for query %s)", response.status_code, query)
         return dict()
     loads = json.loads(response.text)
     if 'detail' in loads and loads['detail'] == RATE_LIMIT_EXCEEDED_MESSAGE:
