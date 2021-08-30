@@ -1,14 +1,39 @@
 import json
 import logging
+import traceback
 
 import requests
 from retrying import retry
 
+from dockerhub.rate_limit_exception import RateLimitException, RATE_LIMIT_EXCEEDED_MESSAGE
 from dockerhub.result import Result
 from secrets import finder
 from secrets.finder import Pattern
 from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
 from utils.utils import sha256
+
+
+def retry_if_io_error(exception):
+    """ TODO """
+    if isinstance(exception, RateLimitException):
+        return True
+    logging.error(traceback.print_tb(exception.__traceback__))
+    return False
+
+
+@retry(wait_fixed=10000, retry_on_exception=retry_if_io_error)
+def get_request(query) -> dict:
+    """ TODO """
+    headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
+    response = requests.request("GET", query, headers=headers, data={}, stream=False)
+    if response.status_code != 200:
+        logging.info(response.status_code)
+    if response.status_code == 404 or response.status_code == 500:
+        return dict()
+    loads = json.loads(response.text)
+    if 'detail' in loads and loads['detail'] == RATE_LIMIT_EXCEEDED_MESSAGE:
+        raise RateLimitException
+    return loads
 
 
 def compute_repository(repository: str) -> str:
@@ -28,35 +53,25 @@ def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
     return results
 
 
-@retry(wait_fixed=10000)
 def collect_layers(repository: str, tag: dict) -> list:
     """ TODO """
-    logging.debug("Tags: %s (on repository %s)", tag["name"], repository)
-    query = "%s/v2/repositories/%s/tags/%s/images" % (DOCKERHUB_URL, repository, tag["name"])
-    logging.debug("Layers url: %s", query)
-    headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={}, stream=False)
-    if response.status_code == 404 or response.status_code == 500:
+    query = "%s/v2/repositories/%s/tags/%s/images" % (DOCKERHUB_URL, repository, tag['name'])
+    logging.debug("Tags: %s (on repository %s), Layers url: %s ", tag['name'], repository, query)
+    response = get_request(query)
+    if len(response) == 0 or 'layers' not in response[0]:
         return []
-    response_as_json = json.loads(response.text)
-    if len(response_as_json) == 0:
-        return []
-    return response_as_json[0]['layers']
+    return response[0]['layers']
 
 
-@retry(wait_fixed=10000)
 def parse_tags(repository: str):
     """ TODO """
     query = "%s/v2/repositories/%s/tags?page=1&page_size=1&ordering=last_updated" % (DOCKERHUB_URL, repository)
     logging.debug("Tags url: %s", query)
-    headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={}, stream=False)
-    if response.status_code != 200:
-        logging.debug("Cannot be parsed so bypassed: %s", query)
+    tags = get_request(query)
+    if bool(tags):
         return
-    tags = json.loads(response.text)
-    if tags["count"] > 0:
-        collected = collect_sensitive_data_from_tag(repository, tags["results"][0])
+    if 'count' in tags and tags['count'] > 0:
+        collected = collect_sensitive_data_from_tag(repository, tags['results'][0])
         if len(collected) > 0:
             for sensitive_data in collected:
                 logging.info("%s : %s", repository, sensitive_data.to_json())
@@ -64,21 +79,18 @@ def parse_tags(repository: str):
 
 def parse_repository(summary: dict):
     """ TODO """
-    logging.debug("Image to parse: %s", summary["name"])
-    repository = compute_repository(summary["name"])
+    logging.debug("Image to parse: %s", summary['name'])
+    repository = compute_repository(summary['name'])
     parse_tags(repository)
 
 
-@retry(wait_fixed=10000)
 def list_last_updated_image(currently_parsed_elements: list) -> list:
     """ List last updated images """
+    # TODO loop instead of '1'
     page = "1"
     query = "%s?q=&type=image&tag&sort=updated_at&order=desc&page_size=%s&page=%s" \
             % (DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE, page)
-    headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={}, stream=False)
-    logging.debug("Last pushed images (page %s) : %s", str(page), response.text)
-    summaries = json.loads(response.text)["summaries"]
+    summaries = get_request(query)['summaries']
     for summary in summaries:
         computed = sha256(summary)
         if computed in currently_parsed_elements:

@@ -7,7 +7,8 @@ from dockerhub.puller import list_last_updated_image
 
 def main():
     """ main """
-    parser = argparse.ArgumentParser(description='Collect sensitive from Dockerhub related to last pushed Docker images')
+    parser = argparse.ArgumentParser(description='Collect sensitive from Dockerhub related to last pushed '
+                                                 'Docker images')
     # parser.add_argument('--configuration-file', type=int, required=True, help='Configuration file')
     parser.add_argument("--log-level", default=logging.INFO, type=lambda x: getattr(logging, x),
                         help="Configure the logging level.")
