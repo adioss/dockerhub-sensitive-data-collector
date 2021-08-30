@@ -30,9 +30,10 @@ def get_request(query) -> dict:
     headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
     response = requests.request("GET", query, headers=headers, data={}, stream=False)
     if response.status_code in UNMANAGED_RESPONSE_CODE:
+        logging.debug("Unmanaged response: %s (for query %s)", response.status_code, query)
         return dict()
     if response.status_code != 200:
-        logging.warning("Unmanaged response: %s (for query %s)", response.status_code, query)
+        logging.warning("Unknown response: %s (for query %s)", response.status_code, query)
         return dict()
     loads = json.loads(response.text)
     if 'detail' in loads and loads['detail'] == RATE_LIMIT_EXCEEDED_MESSAGE:
