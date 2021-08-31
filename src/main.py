@@ -3,10 +3,7 @@ import logging
 import time
 
 from dockerhub.puller import list_last_updated_image
-from dockerhub.result import Result
-from secrets.pattern import Pattern
 from utils.config import Config
-from utils.file import write_result
 
 
 def main():

@@ -8,6 +8,7 @@ from utils.file import write_result
 from utils.http import get_request
 from utils.utils import sha256
 
+
 def compute_repository(repository: str) -> str:
     """ TODO """
     repository = repository.replace(" ", "-")
