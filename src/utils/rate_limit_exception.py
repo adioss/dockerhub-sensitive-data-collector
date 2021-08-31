@@ -1,6 +1,6 @@
 from typing import Final
 
-RATE_LIMIT_EXCEEDED_MESSAGE: Final = "RATE LIMIT EXCEEDED"
+RATE_LIMIT_EXCEEDED_MESSAGE: Final = "rate limit exceeded"
 
 
 class RateLimitException(Exception):
