@@ -30,7 +30,8 @@ class Config:
             except FileNotFoundError:
                 logging.error("DB configuration error: configuration file cannot be found. Exiting!")
                 sys.exit()
-        logging.basicConfig(level=config['logLevel'])
+        logging.basicConfig(level=config['logLevel'],
+                            format="%(asctime)s %(levelname)s %(threadName)s %(name)s %(message)s")
         Config.__instance.config = config
         return Config.__instance
 
