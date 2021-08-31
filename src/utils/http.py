@@ -31,6 +31,6 @@ def get_request(query) -> dict:
         logging.warning("Unknown response: %s (for query %s)", response.status_code, query)
         return dict()
     loads = json.loads(response.text)
-    if 'detail' in loads and loads['detail'] == RATE_LIMIT_EXCEEDED_MESSAGE:
+    if 'detail' in loads and loads['detail'].upper() == RATE_LIMIT_EXCEEDED_MESSAGE:
         raise RateLimitException
     return loads
