@@ -2,7 +2,8 @@
 *.key
 *.pem
 rsync.sh
-resources/config.yml
+config.yml
+output.txt
 __pycache__/
 *.py[cod]
 *$py.class

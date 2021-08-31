@@ -1,45 +1,12 @@
-import json
 import logging
-import traceback
-from typing import Final
 
-import requests
-from retrying import retry
-
-from dockerhub.rate_limit_exception import RateLimitException, RATE_LIMIT_EXCEEDED_MESSAGE
 from dockerhub.result import Result
 from secrets import finder
 from secrets.finder import Pattern
 from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
+from utils.file import write_result
+from utils.http import get_request
 from utils.utils import sha256
-
-UNMANAGED_RESPONSE_CODE: Final = [403, 404, 500]
-
-
-def retry_if_io_error(exception):
-    """ TODO """
-    if isinstance(exception, RateLimitException):
-        return True
-    logging.error(traceback.print_tb(exception.__traceback__))
-    return False
-
-
-@retry(wait_fixed=10000, retry_on_exception=retry_if_io_error)
-def get_request(query) -> dict:
-    """ TODO """
-    headers = {'Search-Version': 'v3', 'Content-Type': 'application/json'}
-    response = requests.request("GET", query, headers=headers, data={}, stream=False)
-    if response.status_code in UNMANAGED_RESPONSE_CODE:
-        logging.debug("Unmanaged response: %s (for query %s)", response.status_code, query)
-        return dict()
-    if response.status_code != 200:
-        logging.warning("Unknown response: %s (for query %s)", response.status_code, query)
-        return dict()
-    loads = json.loads(response.text)
-    if 'detail' in loads and loads['detail'] == RATE_LIMIT_EXCEEDED_MESSAGE:
-        raise RateLimitException
-    return loads
-
 
 def compute_repository(repository: str) -> str:
     """ TODO """
@@ -79,12 +46,12 @@ def parse_tags(repository: str):
         collected = collect_sensitive_data_from_tag(repository, tags['results'][0])
         if len(collected) > 0:
             for sensitive_data in collected:
-                logging.info("%s : %s", repository, sensitive_data.to_json())
+                write_result(repository, sensitive_data)
 
 
 def parse_repository(summary: dict):
     """ TODO """
-    logging.debug("Image to parse: %s", summary['name'])
+    logging.info("Image to parse: %s", summary['name'])
     repository = compute_repository(summary['name'])
     parse_tags(repository)
 
