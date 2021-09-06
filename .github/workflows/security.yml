@@ -13,7 +13,7 @@ jobs:
         uses: anchore/scan-action@v2
         with:
           image: "adioss/dockerhub-sensitive-data-collector:latest"
-          fail-build: true
+          fail-build: false
           debug: false
           severity-cutoff: critical
           acs-report-enable: true
