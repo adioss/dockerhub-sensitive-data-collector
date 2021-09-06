@@ -3,7 +3,7 @@ name: security
 on: push
 
 jobs:
-  build:
+  check-security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
