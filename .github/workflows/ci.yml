@@ -20,8 +20,8 @@ jobs:
       - name: Test with pytest
         run: |
           cd src
-          pytest -vv
+          pipenv run pytest -vv
       - name: Lint with pylint
         run: |
           cd src
-          pylint */*.py
+          pipenv run pylint */*.py
