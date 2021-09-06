@@ -11,7 +11,7 @@ jobs:
         run: docker build . --file Dockerfile --tag adioss/dockerhub-sensitive-data-collector:latest
 
       - name: Scan image with Anchore
-        uses: anchore/scan-action@v1
+        uses: anchore/scan-action@v2
         with:
           image-reference: "adioss/dockerhub-sensitive-data-collector:latest"
           dockerfile-path: "Dockerfile"
