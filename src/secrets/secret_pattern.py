@@ -4,6 +4,7 @@ from typing import Pattern, List
 
 
 class ComplexSecretPattern:
+    """ Inclusion and exclusions lists of regex to trigger a finding """
     inclusions: List[Pattern]
     exclusions: List[Pattern]
 

@@ -26,10 +26,10 @@ def get_request(query) -> dict:
     response = requests.request("GET", query, headers=headers, data={}, stream=False)
     if response.status_code in UNMANAGED_RESPONSE_CODE:
         logging.debug("Unmanaged response: %s (for query %s)", response.status_code, query)
-        return dict()
+        return {}
     if response.status_code != 200:
         logging.warning("Unknown response: %s (for query %s)", response.status_code, query)
-        return dict()
+        return {}
     loads = json.loads(response.text)
     if 'detail' in loads and loads['detail'].lower() == RATE_LIMIT_EXCEEDED_MESSAGE:
         raise RateLimitException

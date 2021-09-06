@@ -6,8 +6,8 @@ from envyaml import EnvYAML
 
 
 class Config:
+    """ Config class """
     __instance = None
-    __config = None
 
     @staticmethod
     def get_instance(parser=None):
@@ -37,8 +37,10 @@ class Config:
 
     @staticmethod
     def output_path():
+        """ Getter """
         return Config.__instance.config['outputPath']
 
     @staticmethod
     def log_level():
+        """ Getter """
         return Config.__instance.config['logLevel']

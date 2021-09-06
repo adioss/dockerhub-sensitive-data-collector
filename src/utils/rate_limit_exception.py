@@ -4,4 +4,4 @@ RATE_LIMIT_EXCEEDED_MESSAGE: Final = "rate limit exceeded"
 
 
 class RateLimitException(Exception):
-    pass
+    """ Rate limit exceeded exception """

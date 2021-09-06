@@ -149,8 +149,10 @@ disable=print-statement,
         E0401, # Unable to import
         R0903, # Too few public methods
         W0640, # Cell variable key defined in loop
-        W0511,  # Warn TODO
-        C0411  # Import order
+        W0511, # Warn TODO
+        C0411, # Import order
+        W1401, # Anomalous backslash in string
+
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
