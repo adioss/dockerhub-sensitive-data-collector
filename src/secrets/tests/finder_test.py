@@ -79,7 +79,7 @@ class DefaultFinderTestCase(unittest.TestCase):
         """ test """
         # Given
         tests = [
-            # {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa ', 'expected': True},
+            {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa ', 'expected': True},
             {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaa aaa ', 'expected': False},
             {'value': '{"digest": $url = \'https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC'
                       '-ED5963AEAD48/vc_redist.x64.exe\'}', 'expected': False},

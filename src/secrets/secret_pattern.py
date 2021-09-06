@@ -23,7 +23,10 @@ class SecretPattern(enum.Enum):
         re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]'
                    '|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
     ])
-    AZURE_CLIENT_SECRET = ComplexSecretPattern([re.compile(".*((?i)^/([0-9A-Fa-f]{4}-){4}[0-9A-Fa-f]{12}?).*")], [])
+    AZURE_CLIENT_SECRET = ComplexSecretPattern([re.compile(".*((?i)(([0-9A-Fa-f]{4}-){4}[0-9A-Fa-f]{12})).*")], [
+        re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]'
+                   '|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+    ])
     TWITTER_KEY = ComplexSecretPattern([re.compile(".*((?i)twitter(.{0,20})).*")], [])
     GITHUB_KEY = ComplexSecretPattern([re.compile(".*((?i)(ghu|ghs|gho|ghp)_[0-9a-zA-Z]{36}).*")], [])
     GCP_KEY = ComplexSecretPattern([re.compile(".*((?i)AIza).*")], [])
