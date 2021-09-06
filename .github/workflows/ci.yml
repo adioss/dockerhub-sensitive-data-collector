@@ -19,9 +19,11 @@ jobs:
           pipenv install --dev
       - name: Test with pytest
         run: |
+          pipenv install --dev
           cd src
           pipenv run pytest -vv
       - name: Lint with pylint
         run: |
+          pipenv install --dev
           cd src
           pipenv run pylint */*.py
