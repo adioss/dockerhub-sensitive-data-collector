@@ -2,7 +2,7 @@ import logging
 
 from dockerhub.result import Result
 from secrets import finder
-from secrets.finder import Pattern
+from secrets.finder import SecretPattern
 from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
 from utils.file import write_result
 from utils.http import get_request
@@ -20,9 +20,9 @@ def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
     layers: list = collect_layers(repository, tag)
     results = []
     for layer in layers:
-        for pattern in Pattern:
-            if finder.contains_secret_pattern(layer['instruction'], pattern):
-                results.append(Result(repository, pattern, layer))
+        for secret_pattern in SecretPattern:
+            if finder.contains_secret_pattern(layer['instruction'], secret_pattern):
+                results.append(Result(repository, secret_pattern, layer))
     return results
 
 
