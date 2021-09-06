@@ -1,0 +1,2 @@
+Pipfile.lock
+src/secrets/tests/finder_test.py

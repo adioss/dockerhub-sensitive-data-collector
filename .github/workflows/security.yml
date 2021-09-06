@@ -25,3 +25,5 @@ jobs:
       #        run: cat ${{ steps.scan.outputs.sarif }}
       - name: Find Secrets
         uses: max/secret-scan@master
+        with:
+          exclude_path: '.github/workflows/configuration/exclude_paths.txt'
