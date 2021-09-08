@@ -34,7 +34,7 @@ class DefaultFinderTestCase(unittest.TestCase):
         ]
         for tested in tests:
             # When
-            result = finder.contains_secret_pattern(tested['value'], finder.SecretPattern.AWS_CREDENTIAL_FILE)
+            result = finder.contains_secret_pattern(tested['value'], finder.SecretPattern.CREDENTIAL_FILE)
             # Then
             self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])
 

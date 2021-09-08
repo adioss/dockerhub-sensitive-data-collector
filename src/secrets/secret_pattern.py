@@ -15,7 +15,7 @@ class ComplexSecretPattern:
 
 class SecretPattern(enum.Enum):
     """ Regexp for secret detection """
-    AWS_CREDENTIAL_FILE = ComplexSecretPattern([re.compile(".*credentials.*")], [])
+    CREDENTIAL_FILE = ComplexSecretPattern([re.compile(".*credentials.*")], [])
     AWS_KEY = ComplexSecretPattern([re.compile(".*(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA).*")], [])
     AWS_SECRET = ComplexSecretPattern([re.compile(".*(AWS|aws).*[A-Za-z0-9/+=]{40}")], [
         re.compile('[a-f0-9]{64}'),
