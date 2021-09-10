@@ -24,13 +24,16 @@ class SecretPattern(enum.Enum):
         re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]'
                    '|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
     ])
-    AZURE_CLIENT_SECRET = ComplexSecretPattern([re.compile(".*((?i)(([0-9A-Fa-f]{4}-){4}[0-9A-Fa-f]{12})).*")], [
-        re.compile('[a-f0-9]{64}'),
-        re.compile('[a-f0-9]{96}'),
-        re.compile('[a-f0-9]{128}'),
-        re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]'
-                   '|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
-    ])
+    AZURE_CLIENT_ID = ComplexSecretPattern(
+        [re.compile(".*(AZURE|azure).*(([0-9A-Fa-f]{8}-){1,}([0-9A-Fa-f]{4}-){3,}[0-9A-Fa-f]{12}).*")],
+        [
+            re.compile('[a-f0-9]{64}'),
+            re.compile('[a-f0-9]{96}'),
+            re.compile('[a-f0-9]{128}'),
+            # re.compile('([0-9A-Fa-f]{8}-){1}([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}'),
+            re.compile('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]'
+                       '|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+        ])
     TWITTER_KEY = ComplexSecretPattern([re.compile(".*((?i)twitter(.{0,20})).*")], [])
     NPM_TOKEN = ComplexSecretPattern([re.compile(".*(NPM_KEY|npm_key|NPM_TOKEN|npm_token).*")], [])
     GITHUB_KEY = ComplexSecretPattern([re.compile(".*((?i)(ghu|ghs|gho|ghp)_[0-9a-zA-Z]{36}).*")], [])

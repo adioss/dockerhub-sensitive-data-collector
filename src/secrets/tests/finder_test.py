@@ -79,14 +79,19 @@ class DefaultFinderTestCase(unittest.TestCase):
         """ test """
         # Given
         tests = [
-            {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa ', 'expected': True},
-            {'value': ' aaaa-aaaa-aaaa-aaaa-aaaaaaaaa aaa ', 'expected': False},
+            {'value': 'ENV AZURE_ID=c35ba882-b5ed-405f-b929-39e8d8abd3f6 test', 'expected': True},
+            {'value': 'ENV azure_id=c35ba882-b5ed-405f-b929-39e8d8abd3f6', 'expected': True},
+            {'value': 'data before ENV azure_id=c35ba882-b5ed-405f-b929-39e8d8abd3f6 data after', 'expected': True},
+            {'value': ' aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa ', 'expected': False},
+            {'value': 'ENV AZURE_ID=a882-b5ed-405f-b929-39e8d8abd3f6', 'expected': False},
+            {'value': 'ENV WEBSITE_ID=c35ba882-b5ed-405f-b929-39e8d8abd3f6', 'expected': False},
+            {'value': '854600d3-f5d9-45d7-9ff2-17d851f2831a', 'expected': False},
             {'value': '{"digest": $url = \'https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC'
                       '-ED5963AEAD48/vc_redist.x64.exe\'}', 'expected': False},
         ]
         for tested in tests:
             # When
-            result = finder.contains_secret_pattern(tested['value'], finder.SecretPattern.AZURE_CLIENT_SECRET)
+            result = finder.contains_secret_pattern(tested['value'], finder.SecretPattern.AZURE_CLIENT_ID)
             # Then
             self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])
 
