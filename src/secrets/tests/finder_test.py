@@ -25,7 +25,7 @@ class DefaultFinderTestCase(unittest.TestCase):
             # Then
             self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])
 
-    def test_Contains_Aws_Credential_File_Pattern(self):
+    def test_contains_aws_credential_file_pattern(self):
         """ test """
         # Given
         tests = [
@@ -87,5 +87,22 @@ class DefaultFinderTestCase(unittest.TestCase):
         for tested in tests:
             # When
             result = finder.contains_secret_pattern(tested['value'], finder.SecretPattern.AZURE_CLIENT_SECRET)
+            # Then
+            self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])
+
+    def test_contains_npm_token_pattern(self):
+        """ test """
+        # Given
+        tests = [
+            {'value': 'NPM_TOKEN=affa60d0-4fb5-4f88-9745-6c244e29372a', 'expected': True},
+            {'value': '1 NPM_TOKEN=affa60d0-4fb5-4f88-9745-6c244e29372a /bin/sh -c apt-get update ', 'expected': True},
+            {'value': '2 NPM_KEY=08a0a385-e6e2-4f3a-b96b-feaf0a574d36 NPM_REPO=https://registry.npmjs.org/ ',
+             'expected': True},
+            {'value': '{"digest": $url = \'https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC'
+                      '-ED5963AEAD48/vc_redist.x64.exe\'}', 'expected': False},
+        ]
+        for tested in tests:
+            # When
+            result = finder.contains_secret_pattern(tested['value'], finder.SecretPattern.NPM_TOKEN)
             # Then
             self.assertEqual(result, tested['expected'], "Failed: %s" % tested['value'])
