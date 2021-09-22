@@ -41,7 +41,7 @@ def parse_tags(repository: str):
     query = "%s/v2/repositories/%s/tags?page=1&page_size=1&ordering=last_updated" % (DOCKERHUB_URL, repository)
     logging.debug("Tags url: %s", query)
     tags = get_request(query)
-    if bool(tags):
+    if not bool(tags):
         return
     if 'count' in tags and tags['count'] > 0:
         collected = collect_sensitive_data_from_tag(repository, tags['results'][0])
