@@ -22,7 +22,7 @@ def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
     for layer in layers:
         for secret_pattern in SecretPattern:
             if finder.contains_secret_pattern(layer['instruction'], secret_pattern):
-                results.append(Result(repository, secret_pattern, layer))
+                results.append(Result(repository, tag['name'], secret_pattern, layer))
     return results
 
 
@@ -47,7 +47,7 @@ def parse_tags(repository: str):
         collected = collect_sensitive_data_from_tag(repository, tags['results'][0])
         if len(collected) > 0:
             for sensitive_data in collected:
-                write_result(repository, sensitive_data)
+                write_result(sensitive_data)
 
 
 def parse_repository(summary: dict):
