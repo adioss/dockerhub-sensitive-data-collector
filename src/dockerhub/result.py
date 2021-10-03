@@ -1,6 +1,6 @@
 import json
 
-from secrets.secret_pattern import SecretPattern
+from unconcealment.secret_pattern import SecretPattern
 
 
 class Result:

@@ -8,6 +8,7 @@ argparse = "*"
 requests = "*"
 EnvYAML = "*"
 retrying = "*"
+unconcealment = "*"
 
 [dev-packages]
 pylint = "*"

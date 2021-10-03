@@ -1,8 +1,9 @@
 import logging
 
+from unconcealment import finder
+from unconcealment.secret_pattern import SecretPattern
+
 from dockerhub.result import Result
-from secrets import finder
-from secrets.finder import SecretPattern
 from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
 from utils.file import write_result
 from utils.http import get_request
