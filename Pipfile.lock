@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6f660686f4c3ef54e58dc27ca2573eb125c0c916aff64d1c8b37ba43bb730ebb"
+            "sha256": "2f85bfc96ab7003a1f775656041e180b2146b637148a2b83b7ad279e3e4ecdd5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -26,10 +26,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:2bbf76fd432960138b3ef6dda3dde0544f27cbf8546c458e60baf371917ba9ee",
-                "sha256:50b1e4f8446b06f41be7dd6338db18e0990601dce795c2b1686458aa7e8fa7d8"
+                "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872",
+                "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"
             ],
-            "version": "==2021.5.30"
+            "version": "==2021.10.8"
         },
         "charset-normalizer": {
             "hashes": [
@@ -115,11 +115,11 @@
         },
         "unconcealment": {
             "hashes": [
-                "sha256:16bf8da8da63e37c8c14ca916db02af8e867634b74dd147382a035ff7d11ce42",
-                "sha256:c68d95da85235c57bdb8138cf2592f77328d0828b060780f2d34915b56221cd9"
+                "sha256:07cb494d4b6491f590716c59d68c19cbe1acc34ed486e9a2f5e645c818375838",
+                "sha256:7eb651268717854e33977d9fcc4d929d5e9f2aa3d811894b93acb0c865a8a68d"
             ],
             "index": "pypi",
-            "version": "==0.5.0"
+            "version": "==0.6.0"
         },
         "urllib3": {
             "hashes": [
@@ -133,11 +133,11 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:dcc06f6165f415220013801642bd6c9808a02967070919c4b746c6864c205471",
-                "sha256:fe81f80c0b35264acb5653302ffbd935d394f1775c5e4487df745bf9c2442708"
+                "sha256:304e99c129794f2cfda584a12b71fde85205da950e2f330f4be09150525ae949",
+                "sha256:9eaeaf92b3e21b70bec1a262e7eb118d2e96294892a5de595c92a12adc80dfc2"
             ],
             "markers": "python_version ~= '3.6'",
-            "version": "==2.8.0"
+            "version": "==2.8.2"
         },
         "isort": {
             "hashes": [

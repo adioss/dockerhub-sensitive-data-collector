@@ -22,8 +22,9 @@ def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
     results = []
     for layer in layers:
         for secret_pattern in SecretPattern:
-            if finder.contains_secret_pattern(layer['instruction'], secret_pattern):
-                results.append(Result(repository, tag['name'], secret_pattern, layer))
+            secret = finder.extract_secret(layer['instruction'], secret_pattern)
+            if secret is not None:
+                results.append(Result(repository, tag['name'], secret_pattern, secret, layer))
     return results
 
 
