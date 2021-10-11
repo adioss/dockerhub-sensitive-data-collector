@@ -30,7 +30,7 @@ def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
 
 def collect_layers(repository: str, tag: dict) -> list:
     """ TODO """
-    query = "%s/v2/repositories/%s/tags/%s/images" % (DOCKERHUB_URL, repository, tag['name'])
+    query = f"{DOCKERHUB_URL}/v2/repositories/{repository}/tags/{tag['name']}/images"
     logging.debug("Tags: %s (on repository %s), Layers url: %s ", tag['name'], repository, query)
     response = get_request(query)
     if len(response) == 0 or 'layers' not in response[0]:
@@ -40,7 +40,7 @@ def collect_layers(repository: str, tag: dict) -> list:
 
 def parse_tags(repository: str):
     """ TODO """
-    query = "%s/v2/repositories/%s/tags?page=1&page_size=1&ordering=last_updated" % (DOCKERHUB_URL, repository)
+    query = f"{DOCKERHUB_URL}/v2/repositories/{repository}/tags?page=1&page_size=1&ordering=last_updated"
     logging.debug("Tags url: %s", query)
     tags = get_request(query)
     if not bool(tags):
@@ -63,8 +63,8 @@ def list_last_updated_image(currently_parsed_elements: list) -> list:
     """ List last updated images """
     # TODO loop instead of '1'
     page = "1"
-    query = "%s?q=&type=image&tag&sort=updated_at&order=desc&page_size=%s&page=%s" \
-            % (DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE, page)
+    query = f"{DOCKERHUB_SEARCH_URL}?q=&type=image&tag&sort=updated_at&order=desc&page_size={SEARCH_PAGE_SIZE}" \
+            f"&page={page}"
     summaries = get_request(query)['summaries']
     for summary in summaries:
         computed = sha256(summary)
