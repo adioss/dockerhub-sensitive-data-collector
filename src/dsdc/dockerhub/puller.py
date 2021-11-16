@@ -3,11 +3,11 @@ import logging
 from unconcealment import finder
 from unconcealment.secret_pattern import SecretPattern
 
-from dockerhub.result import Result
-from utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
-from utils.file import write_result
-from utils.http import get_request
-from utils.utils import sha256
+from dsdc.dockerhub.result import Result
+from dsdc.utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
+from dsdc.utils.file import write_result
+from dsdc.utils.http import get_request
+from dsdc.utils.utils import sha256
 
 
 def compute_repository(repository: str) -> str:

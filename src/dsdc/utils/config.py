@@ -7,14 +7,13 @@ from envyaml import EnvYAML
 
 class Config:
     """ Config class """
-    __instance = None
+    instance: dict[str, str] = None
 
     @staticmethod
-    def get_instance(parser=None):
+    def init(parser=None):
         """ Get singleton instance of Config """
-        if Config.__instance is not None:
-            return Config.__instance
-        Config.__instance = Config()
+        if Config.instance is not None:
+            return Config.instance
         args = parser.parse_args()
         config = {
             'logLevel': args.log_level,
@@ -32,15 +31,15 @@ class Config:
                 sys.exit()
         logging.basicConfig(level=config['logLevel'],
                             format="%(asctime)s %(levelname)s %(threadName)s %(name)s %(message)s")
-        Config.__instance.config = config
-        return Config.__instance
+        Config.instance = config
+        return Config.instance
 
     @staticmethod
     def output_path():
         """ Getter """
-        return Config.__instance.config['outputPath']
+        return Config.instance['outputPath']
 
     @staticmethod
     def log_level():
         """ Getter """
-        return Config.__instance.config['logLevel']
+        return Config.instance['logLevel']
