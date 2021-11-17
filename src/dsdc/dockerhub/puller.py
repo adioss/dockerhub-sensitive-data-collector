@@ -16,7 +16,7 @@ def compute_repository(repository: str) -> str:
     return repository if "/" in repository else "library/" + repository
 
 
-def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
+def collect_sensitive_data_from_tag(repository: str, tag: str) -> list:
     """ TODO """
     layers: list = collect_layers(repository, tag)
     results = []
@@ -24,14 +24,14 @@ def collect_sensitive_data_from_tag(repository: str, tag: dict) -> list:
         for secret_pattern in SecretPattern:
             secret = finder.extract_secret(layer['instruction'], secret_pattern)
             if secret is not None:
-                results.append(Result(repository, tag['name'], secret_pattern, secret, layer))
+                results.append(Result(repository, tag, secret_pattern, secret, layer))
     return results
 
 
-def collect_layers(repository: str, tag: dict) -> list:
+def collect_layers(repository: str, tag: str) -> list:
     """ TODO """
-    query = f"{DOCKERHUB_URL}/v2/repositories/{repository}/tags/{tag['name']}/images"
-    logging.debug("Tags: %s (on repository %s), Layers url: %s ", tag['name'], repository, query)
+    query = f"{DOCKERHUB_URL}/v2/repositories/{repository}/tags/{tag}/images"
+    logging.debug("Tags: %s (on repository %s), Layers url: %s ", tag, repository, query)
     response = get_request(query)
     if len(response) == 0 or 'layers' not in response[0]:
         return []
@@ -46,10 +46,15 @@ def parse_tags(repository: str):
     if not bool(tags):
         return
     if 'count' in tags and tags['count'] > 0:
-        collected = collect_sensitive_data_from_tag(repository, tags['results'][0])
-        if len(collected) > 0:
-            for sensitive_data in collected:
-                write_result(sensitive_data)
+        parse_tag(repository, tags['results'][0]['name'])
+
+
+def parse_tag(repository, tag):
+    """ TODO """
+    collected = collect_sensitive_data_from_tag(repository, tag)
+    if len(collected) > 0:
+        for sensitive_data in collected:
+            write_result(sensitive_data)
 
 
 def parse_repository(summary: dict):
