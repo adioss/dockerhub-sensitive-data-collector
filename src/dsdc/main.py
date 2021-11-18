@@ -12,7 +12,7 @@ def main():
                                                  'Docker images')
     parser.add_argument('-o', '--output-path', type=str, required=False, help='Output path')
     parser.add_argument('-t', '--tag', type=str, required=False, help='Check a specific image:tag')
-    parser.add_argument('-f', '--filter', type=str, required=False, help='Filter specific image:tag using regexp')
+    parser.add_argument('-r', '--regexp', type=str, required=False, help='Filter specific image:tag using regexp')
     parser.add_argument('-l', '--log-level', default=logging.INFO, type=lambda x: getattr(logging, x),
                         help="Configure the logging level.")
     Config.init(parser)

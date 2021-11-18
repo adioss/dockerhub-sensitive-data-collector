@@ -4,6 +4,7 @@ from unconcealment import finder
 from unconcealment.secret_pattern import SecretPattern
 
 from dsdc.dockerhub.result import Result
+from dsdc.utils.config import Config
 from dsdc.utils.contants import DOCKERHUB_URL, DOCKERHUB_SEARCH_URL, SEARCH_PAGE_SIZE
 from dsdc.utils.file import write_result
 from dsdc.utils.http import get_request
@@ -46,7 +47,12 @@ def parse_tags(repository: str):
     if not bool(tags):
         return
     if 'count' in tags and tags['count'] > 0:
-        parse_tag(repository, tags['results'][0]['name'])
+        tag_name = tags['results'][0]['name']
+        # if no regexp or if regexp match something
+        if (Config.regexp() is None or
+                (Config.regexp() is not None and Config.regexp().match(f"{repository}/{tag_name}") is not None)):
+            logging.info("Tag to parse: %s:%s", repository, tag_name)
+            parse_tag(repository, tag_name)
 
 
 def parse_tag(repository, tag):
@@ -59,7 +65,6 @@ def parse_tag(repository, tag):
 
 def parse_repository(summary: dict):
     """ TODO """
-    logging.info("Image to parse: %s", summary['name'])
     repository = compute_repository(summary['name'])
     parse_tags(repository)
 

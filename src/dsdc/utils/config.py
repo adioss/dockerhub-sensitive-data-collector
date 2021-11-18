@@ -1,4 +1,5 @@
 import logging
+import re
 
 
 class Config:
@@ -14,7 +15,8 @@ class Config:
         config = {
             'logLevel': args.log_level if "log_level" in args else 'INFO',
             'outputPath': args.output_path if "output_path" in args is not None else "output.txt",
-            'tag': args.tag if "tag" in args is not None else None
+            'tag': args.tag if "tag" in args is not None else None,
+            'regexp': re.compile(args.regexp) if "regexp" in args is not None else None
         }
         logging.basicConfig(level=config['logLevel'],
                             format="%(asctime)s %(levelname)s %(threadName)s %(name)s %(message)s")
@@ -35,3 +37,8 @@ class Config:
     def tag():
         """ Getter """
         return Config.instance['tag']
+
+    @staticmethod
+    def regexp():
+        """ Getter """
+        return Config.instance['regexp']
