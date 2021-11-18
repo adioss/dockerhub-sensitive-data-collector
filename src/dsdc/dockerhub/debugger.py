@@ -4,7 +4,7 @@ from unconcealment.secret_pattern import SecretPattern
 
 def debug_from_file(file_path: str):
     """ main """
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
         for line in lines:
             try:
@@ -13,7 +13,8 @@ def debug_from_file(file_path: str):
                 pattern = extract_secret(content, SecretPattern.AZURE_CLIENT_ID)
                 if pattern:
                     # pylint: disable=W0703
-                    print("%s:%s (https://hub.docker.com/r/%s/tags?page=1&ordering=last_updated) : %s" % (
-                        split[0], split[1], split[0], content))
+                    print(f"{split[0]}:{split[1]}"
+                          f" (https://hub.docker.com/r/{split[0]}/tags?page=1&ordering=last_updated) : {content}")
+            # pylint: disable=W0702
             except:
-                print("!!!! Cannot be parsed: %s" % line)
+                print(f"!!!! Cannot be parsed: {line}")

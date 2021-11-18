@@ -1,9 +1,11 @@
 import argparse
 import logging
+import sys
 import time
 
-from dsdc.dockerhub.puller import list_last_updated_image, parse_tag
+from dsdc.dockerhub.puller import list_last_updated_image, collect_sensitive_data_from_tag
 from dsdc.utils.config import Config
+from dsdc.utils.file import write_result
 
 
 def main():
@@ -21,8 +23,8 @@ def main():
     currently_parsed_elements = []
     if Config.tag() is not None:
         config_tag_split = Config.tag().split(":", 1)
-        parse_tag(config_tag_split[0], config_tag_split[1])
-        exit(0)
+        write_result(collect_sensitive_data_from_tag(config_tag_split[0], config_tag_split[1]))
+        sys.exit()
     while True:
         currently_parsed_elements = list_last_updated_image(currently_parsed_elements)
         time.sleep(5)

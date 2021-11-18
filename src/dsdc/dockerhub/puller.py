@@ -17,18 +17,6 @@ def compute_repository(repository: str) -> str:
     return repository if "/" in repository else "library/" + repository
 
 
-def collect_sensitive_data_from_tag(repository: str, tag: str) -> list:
-    """ TODO """
-    layers: list = collect_layers(repository, tag)
-    results = []
-    for layer in layers:
-        for secret_pattern in SecretPattern:
-            secret = finder.extract_secret(layer['instruction'], secret_pattern)
-            if secret is not None:
-                results.append(Result(repository, tag, secret_pattern, secret, layer))
-    return results
-
-
 def collect_layers(repository: str, tag: str) -> list:
     """ TODO """
     query = f"{DOCKERHUB_URL}/v2/repositories/{repository}/tags/{tag}/images"
@@ -52,15 +40,19 @@ def parse_tags(repository: str):
         if (Config.regexp() is None or
                 (Config.regexp() is not None and Config.regexp().match(f"{repository}/{tag_name}") is not None)):
             logging.info("Tag to parse: %s:%s", repository, tag_name)
-            parse_tag(repository, tag_name)
+            write_result(collect_sensitive_data_from_tag(repository, tag_name))
 
 
-def parse_tag(repository, tag):
+def collect_sensitive_data_from_tag(repository, tag):
     """ TODO """
-    collected = collect_sensitive_data_from_tag(repository, tag)
-    if len(collected) > 0:
-        for sensitive_data in collected:
-            write_result(sensitive_data)
+    layers: list = collect_layers(repository, tag)
+    results = []
+    for layer in layers:
+        for secret_pattern in SecretPattern:
+            secret = finder.extract_secret(layer['instruction'], secret_pattern)
+            if secret is not None:
+                results.append(Result(repository, tag, secret_pattern, secret, layer))
+    return results
 
 
 def parse_repository(summary: dict):
