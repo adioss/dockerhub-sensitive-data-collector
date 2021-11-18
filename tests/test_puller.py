@@ -7,7 +7,7 @@ class DefaultPullerTestCase(unittest.TestCase):
     """ Test module 'puller' """
 
     def test_extract_sensitive_data_from_tag(self):
-        """ """
+        """ test sensitive content extracted from remote docker image """
         # Given
         repository = "adioss/dontreproduceathome"
         tag = "latest"

@@ -1,15 +1,31 @@
-name: cd
+name: Continuous Deployment
 
 on:
   workflow_run:
     workflows:
-      - "security"
+      - 'Security'
     branches:
       - main
     types:
       - completed
 
 jobs:
+  create-release-note:
+    name: 'Create release note'
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Semantic Release
+        run: |
+          pip install python-semantic-release
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          semantic-release publish
   push-to-dockerhub:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}

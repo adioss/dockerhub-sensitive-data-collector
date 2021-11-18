@@ -1,71 +1,71 @@
-# dockerhub-sensitive-data-collector
+# Dockerhub Sensitive Data Collector
 
-Dockerhub sensitive data collector
+Collect sensitive data leaked in docker images hosted in [https://hub.docker.com/](https://hub.docker.com/) (AWS, GCP or
+AZURE keys, NPM tokens etc...)
 
-# Prerequisites
+## Badges
 
-```
-# install python/pip
-pip install --upgrade pip
-pip install pipenv
-```
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![ci](https://github.com/adioss/dockerhub-sensitive-data-collector/actions/workflows/ci.yml/badge.svg)](https://github.com/adioss/dockerhub-sensitive-data-collector/actions/workflows/ci.yml)
+[![cd](https://github.com/adioss/dockerhub-sensitive-data-collector/actions/workflows/cd.yml/badge.svg)](https://github.com/adioss/dockerhub-sensitive-data-collector/actions/workflows/cd.yml)
+[![security](https://github.com/adioss/dockerhub-sensitive-data-collector/actions/workflows/security.yml/badge.svg)](https://github.com/adioss/dockerhub-sensitive-data-collector/actions/workflows/security.yml)
 
-# Build & run
+## Usage/Examples
 
-```
-// create a venv and use it (if needed)
-PIPENV_IGNORE_VIRTUALENVS=1 pipenv shell
-
-// install dependencies
-pipenv install --dev
-// lock
-pipenv lock
-// install for prod
-pipenv install --ignore-pipfile
-
-// run 
-pipenv run python main.py
-// or
-python main.py 
+```bash
+  # scan only image 'adioss/dontreproduceathome' with tag 'latest'
+  docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -t adioss/dontreproduceathome:latest 
+   # scan continuously but only images with tag 'latest'
+  docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -r ".*latest"
 ```
 
-# Contribute
+## Running Tests
 
-## Configure Intellij
+To run tests, run the following command
 
-```
-// create a locale venv
-Project structure > SDKs > Add Python SDK 
-Select Pipenv environment and click ok
+```bash
+   poetry run python -m unittest discover -p "test_*.py"
 ```
 
-```
-// build docker image
-docker build  -t adioss/dockerhub-sensitive-data-collector .
-// start 
-docker run -ti --rm --name dhsdc adioss/dockerhub-sensitive-data-collector
-docker run -d --rm --name dhsdc adioss/dockerhub-sensitive-data-collector --log-level=DEBUG
-# push
-docker login
-docker push adioss/dockerhub-sensitive-data-collector
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:adioss/dockerhub-sensitive-data-collector.git
 ```
 
-## Useful commands
+Go to the project directory
 
+```bash
+  cd dockerhub-sensitive-data-collector
 ```
-// debug log level
-python main.py (...) --log-level=DEBUG
 
-// lint
-pylint */*.py
+Install poetry and install dependencies
 
-// test
-python -m unittest discover -p "*_test.py"
-
-// update and lock dependencies
-pipenv update --outdated
-pipenv lock --requirements
-
-// security checks
-pipenv check
+```bash
+  poetry self update
+  poetry install
 ```
+
+Start
+
+```bash
+  poetry run python src/dsdc/main.py 
+```
+
+## Contributing
+
+Contributions are always welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
+
+Please adhere to this project's [`code of conduct`](CODE_OF_CONDUCT.md).
+
+## Authors
+
+- [@adioss](https://www.github.com/adioss)
+
+## Support
+
+For support, create a ticket [https://www.github.com/adioss](https://www.github.com/adioss)

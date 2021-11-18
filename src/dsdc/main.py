@@ -3,18 +3,22 @@ import logging
 import sys
 import time
 
-from dsdc.dockerhub.puller import list_last_updated_image, collect_sensitive_data_from_tag
-from dsdc.utils.config import Config
-from dsdc.utils.file import write_result
+from dockerhub.puller import collect_sensitive_data_from_tag
+from dockerhub.puller import list_last_updated_image
+from utils.config import Config
+from utils.file import write_result
 
 
 def main():
     """ main """
     parser = argparse.ArgumentParser(description='Collect sensitive from Dockerhub related to last pushed '
                                                  'Docker images')
-    parser.add_argument('-o', '--output-path', type=str, required=False, help='Output path')
-    parser.add_argument('-t', '--tag', type=str, required=False, help='Check a specific image:tag')
-    parser.add_argument('-r', '--regexp', type=str, required=False, help='Filter specific image:tag using regexp')
+    parser.add_argument('-o', '--output-path', type=str, required=False,
+                        help='Output path')
+    parser.add_argument('-t', '--tag', type=str, required=False,
+                        help='Check a specific image:tag')
+    parser.add_argument('-r', '--regexp', type=str, required=False,
+                        help='Scan continuously but filter specific image:tag using regexp')
     parser.add_argument('-l', '--log-level', default=logging.INFO, type=lambda x: getattr(logging, x),
                         help="Configure the logging level.")
     Config.init(parser)

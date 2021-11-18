@@ -7,12 +7,12 @@ RUN chown -R dockerhubsensitivedatacollector: /home/dockerhubsensitivedatacollec
 WORKDIR /home/dockerhubsensitivedatacollector
 
 RUN pip install --upgrade pip
-RUN pip install pipenv
-ADD Pipfile .
-ADD Pipfile.lock .
-RUN pipenv install --system --deploy --ignore-pipfile
+RUN pip install poetry
+ADD pyproject.toml .
+ADD poetry.lock .
+RUN poetry install
+RUN chown -R dockerhubsensitivedatacollector: /home/dockerhubsensitivedatacollector
 
-WORKDIR /home/dockerhubsensitivedatacollector/src
 USER dockerhubsensitivedatacollector
 
-ENTRYPOINT ["python", "/home/dockerhubsensitivedatacollector/src/main.py"]
+ENTRYPOINT ["poetry", "run", "python", "src/dsdc/main.py"]

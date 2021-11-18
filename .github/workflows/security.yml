@@ -1,34 +1,65 @@
-name: security
+name: Security
 
 on:
   workflow_run:
     workflows:
-      - "ci"
+      - 'Continuous Integration'
     types:
       - completed
 
 jobs:
-  check-security:
+  find-secrets:
+    name: 'Find Secrets'
     runs-on: ubuntu-latest
+    if: (github.actor != 'dependabot[bot]') && (${{ github.event.workflow_run.conclusion == 'success' }})
     steps:
       - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag adioss/dockerhub-sensitive-data-collector:latest
-      #      - name: Scan image with Anchore
-      #        uses: anchore/scan-action@v2
-      #        with:
-      #          image: "adioss/dockerhub-sensitive-data-collector:latest"
-      #          fail-build: false
-      #          debug: false
-      #          severity-cutoff: critical
-      #          acs-report-enable: true
-      #      - name: Upload Anchore scan SARIF report
-      #        uses: github/codeql-action/upload-sarif@v1
-      #        with:
-      #          sarif_file: ${{ steps.scan.outputs.sarif }}
-      #      - name: Inspect action SARIF report
-      #        run: cat ${{ steps.scan.outputs.sarif }}
       - name: Find Secrets
         uses: max/secret-scan@master
         with:
           exclude_path: '.github/workflows/configuration/exclude_paths.txt'
+  sast:
+    name: 'SAST'
+    runs-on: ubuntu-latest
+    if: (github.actor != 'dependabot[bot]') && (${{ github.event.workflow_run.conclusion == 'success' }})
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+      - name: Run Bandit
+        run: |
+          poetry run bandit -r .
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/ci
+            p/security-audit
+            p/secrets
+  sca:
+    name: 'SCA'
+    runs-on: ubuntu-latest
+    if: (github.actor != 'dependabot[bot]') && (${{ github.event.workflow_run.conclusion == 'success' }})
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+      - name: Run Saftey
+        run: |
+          poetry run safety check
