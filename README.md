@@ -1,7 +1,7 @@
 # Dockerhub Sensitive Data Collector
 
 Collect sensitive data leaked in docker images hosted in [https://hub.docker.com/](https://hub.docker.com/) (AWS, GCP or
-AZURE keys, NPM tokens etc...)
+AZURE keys, NPM tokens etc...) using [unconcealment python library](https://github.com/adioss/unconcealment).
 
 ## Badges
 

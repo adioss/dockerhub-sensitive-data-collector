@@ -1,6 +1,6 @@
 import unittest
 
-from dsdc.dockerhub.puller import collect_sensitive_data_from_tag
+from ..src.dsdc.dockerhub.puller import collect_sensitive_data_from_tag
 
 
 class DefaultPullerTestCase(unittest.TestCase):

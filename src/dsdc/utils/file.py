@@ -1,7 +1,7 @@
 import logging
 from typing import List
 
-from dsdc.utils.config import Config
+from utils.config import Config
 
 
 def write_result(sensitive_contents: List):

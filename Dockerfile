@@ -10,9 +10,10 @@ RUN pip install --upgrade pip
 RUN pip install poetry
 ADD pyproject.toml .
 ADD poetry.lock .
-RUN poetry install
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi
 RUN chown -R dockerhubsensitivedatacollector: /home/dockerhubsensitivedatacollector
 
-USER dockerhubsensitivedatacollector
+#USER dockerhubsensitivedatacollector
 
 ENTRYPOINT ["poetry", "run", "python", "src/dsdc/main.py"]
