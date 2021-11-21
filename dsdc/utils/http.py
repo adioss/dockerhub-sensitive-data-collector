@@ -5,7 +5,8 @@ from typing import Final
 
 import requests
 from retrying import retry
-from utils.rate_limit_exception import RateLimitException, RATE_LIMIT_EXCEEDED_MESSAGE
+
+from dsdc.utils.rate_limit_exception import RateLimitException, RATE_LIMIT_EXCEEDED_MESSAGE
 
 UNMANAGED_RESPONSE_CODE: Final = [403, 404, 500]
 

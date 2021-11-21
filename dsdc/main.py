@@ -3,10 +3,10 @@ import logging
 import sys
 import time
 
-from dockerhub.puller import collect_sensitive_data_from_tag
-from dockerhub.puller import list_last_updated_image
-from utils.config import Config
-from utils.file import write_result
+from dsdc.dockerhub.puller import collect_sensitive_data_from_tag
+from dsdc.dockerhub.puller import list_last_updated_image
+from dsdc.utils.config import Config
+from dsdc.utils.file import write_result
 
 
 def main():

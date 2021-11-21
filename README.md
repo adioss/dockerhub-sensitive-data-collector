@@ -51,7 +51,7 @@ Install poetry and install dependencies
 Start
 
 ```bash
-  poetry run python src/dsdc/main.py 
+  poetry run python dsdc/main.py 
 ```
 
 ## Contributing
