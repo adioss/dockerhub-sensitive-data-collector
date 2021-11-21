@@ -18,7 +18,7 @@ def main():
     parser.add_argument('-t', '--tag', type=str, required=False,
                         help='Check a specific image:tag')
     parser.add_argument('-r', '--regexp', type=str, required=False,
-                        help='Scan continuously but filter specific image:tag using regexp')
+                        help='Scan continuously with provided regexp to filter image:tag')
     parser.add_argument('-l', '--log-level', default=logging.INFO, type=lambda x: getattr(logging, x),
                         help="Configure the logging level.")
     Config.init(parser)
