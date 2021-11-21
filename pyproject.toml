@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dsdc"
-version = "0.0.1"
+version = "0.1.0"
 description = "dockerhub-sensitive-data-collector"
 authors = ["adioss <adrien.pailhes@outlook.com>"]
 license = "GPLv3"
