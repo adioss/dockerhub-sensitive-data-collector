@@ -13,10 +13,32 @@ AZURE keys, NPM tokens etc...) using [unconcealment python library](https://gith
 ## Usage/Examples
 
 ```bash
-  # scan only image 'adioss/dontreproduceathome' with tag 'latest'
-  docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -t adioss/dontreproduceathome:latest 
-   # scan continuously but only images with tag 'latest'
-  docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -r ".*latest"
+# help 
+docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -h                                             
+usage: main.py [-h] [-o OUTPUT_PATH] [-t TAG] [-r REGEXP] [-l LOG_LEVEL]
+
+Collect sensitive from Dockerhub related to last pushed Docker images
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT_PATH, --output-path OUTPUT_PATH
+                        Output path
+  -t TAG, --tag TAG     Check a specific image:tag
+  -r REGEXP, --regexp REGEXP
+                        Scan continuously with provided regexp to filter image:tag
+  -l LOG_LEVEL, --log-level LOG_LEVEL
+                        Configure the logging level.
+```
+
+### Samples
+
+```bash
+# scan only image 'adioss/dontreproduceathome' with tag 'latest'
+docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -t adioss/dontreproduceathome:latest 
+# scan continuously but only images with tag 'latest'
+docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest -r ".*latest"
+# scan continuously any new pushed image
+docker run -ti --rm adioss/dockerhub-sensitive-data-collector:latest
 ```
 
 ## Running Tests
