@@ -11,9 +11,8 @@ main = "dsdc:main"
 [tool.poetry.dependencies]
 python = "^3.8"
 argparse = "^1.4.0"
-unconcealment = "^0.6.2"
+unconcealment = "^0.7.1"
 retrying = "^1.3.3"
-envyaml = "^1.9.210927"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.11.1"
